@@ -1,0 +1,22 @@
+{
+  "name": "hsd-packages",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodech/hsd-packages.git"
+  },
+  "author": "Nodari Chkuaselidze",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nodech/hsd-packages/issues"
+  },
+  "homepage": "https://github.com/nodech/hsd-packages#readme"
+}
