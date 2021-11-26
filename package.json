@@ -1,8 +1,9 @@
 {
-  "name": "hsd-packages",
+  "name": "hs-packages",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "directories": {
     "lib": "lib"
   },
@@ -11,12 +12,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nodech/hsd-packages.git"
+    "url": "git+https://github.com/nodech/hs-packages.git"
   },
   "author": "Nodari Chkuaselidze",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nodech/hsd-packages/issues"
+    "url": "https://github.com/nodech/hs-packages/issues"
   },
-  "homepage": "https://github.com/nodech/hsd-packages#readme"
+  "homepage": "https://github.com/nodech/hs-packages#readme",
+  "dependencies": {
+    "bcfg": "git+https://github.com/bcoin-org/bcfg.git#semver:^0.1.7",
+    "bfile": "git+https://github.com/bcoin-org/bfile.git#semver:^0.2.2"
+  }
 }
