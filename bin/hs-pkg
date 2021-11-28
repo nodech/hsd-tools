@@ -1,0 +1,113 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const {Packages, PackagesError} = require('../lib/packages');
+const util = require('../lib/util');
+
+let packages;
+
+(async () => {
+  const config = util.getConfigs({
+    argv: true,
+    env: true
+  }, {
+    alias: {
+      'h': 'help'
+    }
+  });
+
+  const logger = util.getLogger(config);
+  const root = config.str('root', null);
+
+  if (isHelp(config)) {
+    console.error(help());
+    process.exit(1);
+  }
+
+  packages = new Packages({ root, logger });
+  await packages.ensure();
+  await packages.open();
+
+  const command = config.argv.shift();
+
+  switch (command) {
+    case 'add': {
+      const url = config.str(0, '');
+      await packages.addPackage(url);
+      break;
+    }
+
+    default:
+      throw new PackagesError(`Command ${command} not found. \n${help()}`);
+  }
+
+  await packages.close();
+})().catch(async (e) => {
+  if (e instanceof PackagesError) {
+    console.error(e.message);
+    await packages.close();
+    process.exit(1);
+  }
+
+  await packages.close();
+  throw e;
+}).catch((e) => {
+  console.error(e);
+  process.exit(2);
+});
+
+function help() {
+  return `hs-pkg [options] command [command params]
+Commands:
+  help                   - Show this help.
+
+Package level commands:
+  add         PKG_URL... - Add package(s) and its dependencies to the list.
+  remove      PKG_NAME   - Remove package and its dependencies from the list.
+  remove-only PKG_NAME   - Remove only package from the list,
+                           without removing dependencies.
+  list                   - List packages.
+  clone                  - Clones all listed dependencies.
+  clone       PKG_NAME   - Clones only PKG_NAME.
+  fetch                  - Fetches all listed dependencies.
+  fetch       PKG_NAME   - Fetches only PKG_NAME.
+  info        PKG_NAME   - Show package info.
+  has-updates            - List all packages that have updates.
+  has-unreleased         - List all packages that have unreleased commits.
+
+Dependency commands:
+  sync-dep    PKG_NAME VERSION - Set dependency in the packages to
+                                 this specific version.
+
+Options:
+  -h, --help - show help
+  --project  - where to place packages-info and packages. default: default
+               (refers to $home/.hs-packages/default)
+  --root     - where is the root of the manager. default: $HOME/.hs-packages
+
+Environment:
+  HS_PACKAGES_PROJECT - where to place packages-info and packages.
+                        default: default
+                        (refers to $HOME/.hs-packages/default)
+  HS_PACKAGES_ROOT    - where is the root of the manager.
+                        (default: $HOME/.hs-packages)
+  HS_PACKAGES_LEVEL   - debug level: spam, debug, info, warning, error, none
+
+Examples:
+  hs-pkg add https://github.com/bcoin-org/bfile
+`;
+}
+
+function isHelp(config) {
+  if (config.bool('help'))
+    return true;
+
+  if (config.argv.length === 0)
+    return true;
+
+  if (config.argv[0] === 'help')
+    return true;
+
+  return false;
+}
