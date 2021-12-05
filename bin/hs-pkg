@@ -19,6 +19,7 @@ let packages;
 
   const logger = util.getLogger(config);
   const root = config.str('root', null);
+  const argv = config.argv;
 
   if (isHelp(config)) {
     console.error(help());
@@ -29,12 +30,52 @@ let packages;
   await packages.ensure();
   await packages.open();
 
-  const command = config.argv.shift();
+  const command = argv.shift();
 
   switch (command) {
     case 'add': {
       const url = config.str(0, '');
       await packages.addPackage(url);
+      break;
+    }
+
+    case 'refresh': {
+      const pkgName = config.str(0, '');
+      const onlyNPM = config.bool('npm', false);
+      const gitRemote = config.str('git-remote', '');
+      let onlyGIT = config.bool('git', false);
+
+      if (gitRemote)
+        onlyGIT = true;
+
+      if (onlyNPM && onlyGIT)
+        throw new PackagesError('Mutually exclusive only git and only npm.');
+
+      if (onlyNPM) {
+        await packages.refreshNPMPackage(pkgName);
+        break;
+      }
+
+      if (onlyGIT && gitRemote) {
+        await packages.refreshGitPackageRemote(pkgName, gitRemote);
+        break;
+      }
+
+      if (onlyGIT) {
+        await packages.refreshGitPackage(pkgName);
+        break;
+      }
+
+      await packages.refreshPackage(pkgName);
+    }
+
+    case 'info': {
+      const pkgName = config.str(0);
+      const versions = config.bool('versions');
+
+      await packages.getInfo(pkgName, {
+        versions
+      });
       break;
     }
 
@@ -64,6 +105,15 @@ Commands:
 
 Package level commands:
   add         PKG_URL... - Add package(s) and its dependencies to the list.
+
+  refresh [options]  PKG_NAME   - Fetch information from npm and git.
+    --npm     - refresh npm only
+    --git     - refresh git remotes only
+    --git url - refresh specific remote only
+
+  info [options] PKG_NAME - Get information about package.
+    --versions  - list version table.
+
   remove      PKG_NAME   - Remove package and its dependencies from the list.
   remove-only PKG_NAME   - Remove only package from the list,
                            without removing dependencies.
