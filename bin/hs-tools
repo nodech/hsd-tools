@@ -99,36 +99,10 @@ let packages;
 });
 
 function help() {
-  return `hs-pkg [options] command [command params]
+  return `hs-tools [tool options] command [command options]
 Commands:
   help                   - Show this help.
 
-Package level commands:
-  add         PKG_URL... - Add package(s) and its dependencies to the list.
-
-  refresh [options]  PKG_NAME   - Fetch information from npm and git.
-    --npm     - refresh npm only
-    --git     - refresh git remotes only
-    --git url - refresh specific remote only
-
-  info [options] PKG_NAME - Get information about package.
-    --versions  - list version table.
-
-  remove      PKG_NAME   - Remove package and its dependencies from the list.
-  remove-only PKG_NAME   - Remove only package from the list,
-                           without removing dependencies.
-  list                   - List packages.
-  clone                  - Clones all listed dependencies.
-  clone       PKG_NAME   - Clones only PKG_NAME.
-  fetch                  - Fetches all listed dependencies.
-  fetch       PKG_NAME   - Fetches only PKG_NAME.
-  info        PKG_NAME   - Show package info.
-  has-updates            - List all packages that have updates.
-  has-unreleased         - List all packages that have unreleased commits.
-
-Dependency commands:
-  sync-dep    PKG_NAME VERSION - Set dependency in the packages to
-                                 this specific version.
 
 Options:
   -h, --help - show help
