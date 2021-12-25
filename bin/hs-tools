@@ -48,8 +48,21 @@ process.on('unhandledRejection', (err) => {
   cli.start();
 
   switch (command) {
-    case 'test': {
-      await cli.run('test');
+    case 'git': {
+      const subcmd = argv.shift();
+
+      switch (subcmd) {
+        case 'prlog': {
+          break;
+        }
+        default: {
+          throw new Error(
+            `Subcommand "${subcmd}" of git not found. Check "help"`);
+        }
+      }
+    }
+    case 'example': {
+      await cli.run('example');
       break;
     }
     default:
@@ -74,7 +87,10 @@ function help() {
   return `hs-tools [tool options] command [command options]
 Commands:
   help                   - Show this help.
+  git                    - Git related subcommands
 
+Git subcommands:
+  prlog                  - Log formatted by PRs
 
 Options:
   -h, --help - show help
