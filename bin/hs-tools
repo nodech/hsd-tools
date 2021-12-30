@@ -3,8 +3,8 @@
 'use strict';
 
 const {CLI, CLIError} = require('../lib/cli');
-const util = require('../lib/util');
-const ansi = require('../lib/ansi');
+const util = require('../lib/utils/util');
+const ansi = require('../lib/utils/ansi');
 
 const restoreCursor = () => {
   if (process.stdout.isTTY)
