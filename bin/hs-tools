@@ -31,6 +31,8 @@ process.on('uncaughtException', (err) => {
   process.exit(3);
 });
 
+let cli;
+
 (async () => {
   const config = util.getConfigs({
     argv: true,
@@ -53,7 +55,7 @@ process.on('uncaughtException', (err) => {
   };
 
   const command = argv.shift();
-  const cli = new CLI({
+  cli = new CLI({
     ...options,
     renderer: config.str('ui', null),
     stderr: process.stderr,
@@ -63,7 +65,8 @@ process.on('uncaughtException', (err) => {
   cli.init();
   await cli.ensure();
 
-  cli.start();
+  await cli.ensure();
+  await cli.start();
 
   switch (command) {
     case 'git': {
@@ -87,7 +90,7 @@ process.on('uncaughtException', (err) => {
       throw new CLIError(`Command "${command}" not found. Check "help".`);
   }
 
-  cli.stop();
+  await cli.stop();
 })().catch(async (e) => {
   restoreCursor();
 
