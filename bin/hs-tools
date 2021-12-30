@@ -6,16 +6,29 @@ const {CLI, CLIError} = require('../lib/cli');
 const util = require('../lib/util');
 const ansi = require('../lib/ansi');
 
-const restoreCursor = () => process.stdout.write(ansi.cursor.show);
+const restoreCursor = () => {
+  if (process.stdout.isTTY)
+    process.stdout.write(ansi.cursor.show);
+
+  if (process.stderr.isTTY)
+    process.stderr.write(ansi.cursor.show);
+};
 
 process.on('SIGINT', () => {
   restoreCursor();
   process.exit(1);
 });
+
 process.on('unhandledRejection', (err) => {
   restoreCursor();
   console.error(err);
-  process.exit(1);
+  process.exit(3);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error(err);
+  restoreCursor();
+  process.exit(3);
 });
 
 (async () => {
@@ -28,7 +41,6 @@ process.on('unhandledRejection', (err) => {
     }
   });
 
-  const logger = util.getLogger(config);
   const argv = config.argv;
 
   if (isHelp(config)) {
@@ -36,10 +48,16 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   }
 
+  const options = {
+    cwd: process.cwd()
+  };
+
   const command = argv.shift();
   const cli = new CLI({
-    cwd: process.cwd(),
-    logger: logger
+    ...options,
+    renderer: config.str('ui', null),
+    stderr: process.stderr,
+    stdout: process.stdout
   });
 
   cli.init();
@@ -71,6 +89,8 @@ process.on('unhandledRejection', (err) => {
 
   cli.stop();
 })().catch(async (e) => {
+  restoreCursor();
+
   if (e instanceof CLIError) {
     console.error(e.message);
     process.exit(1);
@@ -79,7 +99,6 @@ process.on('unhandledRejection', (err) => {
   throw e;
 }).catch((e) => {
   console.error(e);
-  restoreCursor();
   process.exit(2);
 });
 
@@ -94,9 +113,7 @@ Git subcommands:
 
 Options:
   -h, --help - show help
-
-Environment:
-  HS_PACKAGES_LOG   - debug level: spam, debug, info, warning, error, none
+  --ui=<type>            - text or loader
 
 Examples:
 
