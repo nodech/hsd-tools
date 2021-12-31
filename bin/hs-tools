@@ -3,6 +3,7 @@
 'use strict';
 
 const {CLI, CLIError} = require('../lib/cli');
+const {Cache} = require('../lib/cache');
 const util = require('../lib/utils/util');
 const ansi = require('../lib/utils/ansi');
 
@@ -31,7 +32,7 @@ process.on('uncaughtException', (err) => {
   process.exit(3);
 });
 
-let cli;
+let cli, cache;
 
 (async () => {
   const config = util.getConfigs({
@@ -39,7 +40,8 @@ let cli;
     env: true
   }, {
     alias: {
-      'h': 'help'
+      'h': 'help',
+      'f': 'force'
     }
   });
 
@@ -57,15 +59,22 @@ let cli;
   const command = argv.shift();
   cli = new CLI({
     ...options,
+    force: config.bool('force', false),
     renderer: config.str('ui', null),
     stderr: process.stderr,
     stdout: process.stdout
   });
 
-  cli.init();
-  await cli.ensure();
+  cache = new Cache({
+    ...options
+  });
 
+  cli.init();
+  cache.init();
+
+  await cache.ensure();
   await cli.ensure();
+  await cache.open();
   await cli.start();
 
   switch (command) {
@@ -91,6 +100,7 @@ let cli;
   }
 
   await cli.stop();
+  await cache.close();
 })().catch(async (e) => {
   restoreCursor();
 
@@ -115,7 +125,8 @@ Git subcommands:
   prlog                  - Log formatted by PRs
 
 Options:
-  -h, --help - show help
+  -h, --help             - show help
+  -f, --force            - Ignore lock
   --ui=<type>            - text or loader
 
 Examples:
