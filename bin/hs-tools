@@ -2,7 +2,8 @@
 
 'use strict';
 
-const {CLI, CLIError} = require('../lib/cli');
+const {CLIError} = require('../lib/errors');
+const {CLI} = require('../lib/cli');
 const {Cache} = require('../lib/cache');
 const util = require('../lib/utils/util');
 const ansi = require('../lib/utils/ansi');
@@ -57,16 +58,17 @@ let cli, cache;
   };
 
   const command = argv.shift();
-  cli = new CLI({
-    ...options,
-    force: config.bool('force', false),
-    renderer: config.str('ui', null),
-    stderr: process.stderr,
-    stdout: process.stdout
-  });
 
   cache = new Cache({
     ...options
+  });
+
+  cli = new CLI({
+    ...options,
+    stderr: process.stderr,
+    stdout: process.stdout,
+    force: config.bool('force', false),
+    renderer: config.str('ui', null)
   });
 
   cli.init();
@@ -74,6 +76,7 @@ let cli, cache;
 
   await cache.ensure();
   await cli.ensure();
+
   await cache.open();
   await cli.start();
 
@@ -83,13 +86,22 @@ let cli, cache;
 
       switch (subcmd) {
         case 'prlog': {
+          await cli.run('git prlog', {
+            ...options,
+            cache: cache,
+            ghuser: config.str('ghuser', null),
+            ghkey: config.str('ghkey', null),
+            remote: config.str('remote', 'origin')
+          });
           break;
         }
         default: {
-          throw new Error(
+          throw new CLIError(
             `Subcommand "${subcmd}" of git not found. Check "help"`);
         }
       }
+
+      break;
     }
     case 'example': {
       await cli.run('example');
@@ -105,7 +117,12 @@ let cli, cache;
   restoreCursor();
 
   if (e instanceof CLIError) {
-    console.error(e.message);
+    await cli.unlockFile();
+
+    if (e.command)
+      console.error(`Command "${e.command}" error:`);
+
+    console.error('  ', e.message);
     process.exit(1);
   }
 
@@ -123,6 +140,9 @@ Commands:
 
 Git subcommands:
   prlog                  - Log formatted by PRs
+    --ghuser             - GH API User(Can be configured in $HOME/.hs-tools.cfg)
+    --ghkey              - GH API Key (Can be configured in $HOME/.hs-tools.cfg)
+    --remote [=origin]   - Which remote to use.
 
 Options:
   -h, --help             - show help
