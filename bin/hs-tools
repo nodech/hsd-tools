@@ -2,11 +2,15 @@
 
 'use strict';
 
+const path = require('path');
+const os = require('os');
 const {CLIError} = require('../lib/errors');
 const {CLI} = require('../lib/cli');
 const {Cache} = require('../lib/cache');
 const util = require('../lib/utils/util');
 const ansi = require('../lib/utils/ansi');
+
+const HOME = os.homedir();
 
 const restoreCursor = () => {
   if (process.stdout.isTTY)
@@ -38,7 +42,8 @@ let cli, cache;
 (async () => {
   const config = util.getConfigs({
     argv: true,
-    env: true
+    env: true,
+    file: path.join(HOME, '.hs-tools.json')
   }, {
     alias: {
       'h': 'help',
@@ -60,7 +65,8 @@ let cli, cache;
   const command = argv.shift();
 
   cache = new Cache({
-    ...options
+    ...options,
+    ignore: config.bool('cache-ignore', false)
   });
 
   cli = new CLI({
@@ -89,8 +95,8 @@ let cli, cache;
           await cli.run('git prlog', {
             ...options,
             cache: cache,
-            ghuser: config.str('ghuser', null),
-            ghkey: config.str('ghkey', null),
+            ghuser: config.str('ghuser', ''),
+            ghkey: config.str('ghkey', ''),
             remote: config.str('remote', 'origin')
           });
           break;
@@ -122,7 +128,7 @@ let cli, cache;
     if (e.command)
       console.error(`Command "${e.command}" error:`);
 
-    console.error('  ', e.message);
+    console.error(e.message);
     process.exit(1);
   }
 
