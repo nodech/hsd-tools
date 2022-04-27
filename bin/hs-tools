@@ -87,6 +87,18 @@ let cli, cache;
   await cli.start();
 
   switch (command) {
+    case 'depcheck': {
+      await cli.run('depcheck', {
+        ...options,
+        cache: cache,
+        ghuser: config.str('ghuser', ''),
+        ghkey: config.str('ghkey', ''),
+        ghconc: config.str('ghconcurrent', 2),
+        npmconc: config.str('npmconcurrent', 2)
+      });
+      break;
+    }
+
     case 'git': {
       const subcmd = argv.shift();
 
