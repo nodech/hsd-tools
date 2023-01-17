@@ -110,7 +110,8 @@ let cli, cache;
             ghuser: config.str('ghuser', ''),
             ghkey: config.str('ghkey', ''),
             ghconc: config.str('ghconcurrent', 2),
-            remote: config.str('remote', 'origin')
+            remote: config.str('remote', 'origin'),
+            longID: config.bool('longid', false)
           });
           break;
         }
@@ -154,11 +155,13 @@ function help() {
 Commands:
   help                   - Show this help.
   git                    - Git related subcommands
+  depcheck               - Check dependencies of the pkg.
 
 Git subcommands:
   prlog                  - Log formatted by PRs
     --remote [=origin]   - Which remote to use.
     --groupbypr          - Group Commits by pr
+    --longid             - Log full commit hash
     Github options bellow...
 
 Options:
@@ -166,10 +169,11 @@ Options:
   -f, --force            - Ignore lock
   --ui=<type>            - text or loader
 
-General github options:
+General options:
   --ghuser               - GH API User
   --ghkey                - GH API Key
   --ghconcurrent         - Concurrent requests to send to the API.
+  --npmconcurrent        - Concurrent requests to send to the NPM.
 
 NOTE:
   Any above configuration can be stored in a config filed at
