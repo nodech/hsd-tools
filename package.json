@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/nodech/hs-packages#readme",
   "dependencies": {
-    "bcfg": "git+https://github.com/bcoin-org/bcfg.git#semver:0.1.7",
-    "bfile": "git+https://github.com/bcoin-org/bfile.git#semver:0.2.2",
-    "blgr": "git+https://github.com/bcoin-org/blgr.git#semver:0.2.0",
-    "bmutex": "git+https://github.com/bcoin-org/bmutex.git#semver:0.1.6",
-    "brq": "git+https://github.com/bcoin-org/brq.git#semver:0.1.8"
+    "bcfg": "~0.2.2",
+    "bfile": "~0.2.3",
+    "blgr": "~0.2.1",
+    "bmutex": "~0.1.7",
+    "brq": "~0.2.1"
   },
   "scripts": {
     "lint": "eslint $(cat .eslintfiles)"
