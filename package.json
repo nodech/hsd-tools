@@ -1,22 +1,21 @@
 {
-  "name": "hs-packages",
-  "version": "0.0.0",
+  "name": "hns-tools",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "private": true,
   "directories": {
     "lib": "lib"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nodech/hs-packages.git"
+    "url": "git+https://github.com/nodech/hns-tools.git"
   },
   "author": "Nodari Chkuaselidze",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nodech/hs-packages/issues"
+    "url": "https://github.com/nodech/hns-tools/issues"
   },
-  "homepage": "https://github.com/nodech/hs-packages#readme",
+  "homepage": "https://github.com/nodech/hns-tools#readme",
   "dependencies": {
     "bcfg": "~0.2.2",
     "bfile": "~0.2.3",
