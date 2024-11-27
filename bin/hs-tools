@@ -54,7 +54,8 @@ let cli, cache;
   const argv = config.argv;
 
   if (isHelp(config)) {
-    console.error(help());
+    process.stderr.write(help());
+    process.stderr.write('\n');
     process.exit(1);
   }
 
@@ -123,6 +124,18 @@ let cli, cache;
 
       break;
     }
+
+    case 'genseeds': {
+      await cli.run('genseeds', {
+        ...options,
+        cache: cache,
+        format: config.str('format', 'ui'),
+        sort: config.str('sort', 'uptime'),
+        includePruned: config.bool('include-pruned', false)
+      });
+      break;
+    }
+
     case 'example': {
       await cli.run('example');
       break;
@@ -156,6 +169,10 @@ Commands:
   help                   - Show this help.
   git                    - Git related subcommands
   depcheck               - Check dependencies of the pkg.
+  genseeds               - Generate seeds for hsd network.
+    --format             - Output format: json, ui
+    --sort               - Sort by: uptime, height
+    --include-pruned     - Include pruned seeds
 
 Git subcommands:
   prlog                  - Log formatted by PRs
@@ -178,8 +195,6 @@ General options:
 NOTE:
   Any above configuration can be stored in a config filed at
 $HOME/.hs-tools.json. Example: {"ghuser": "user", "ghkey" : "apikey.."}
-
-Examples:
 
 `;
 }
