@@ -1,5 +1,5 @@
 {
-  "name": "hns-tools",
+  "name": "hsd-tools",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nodech/hns-tools.git"
+    "url": "git+https://github.com/nodech/hsd-tools.git"
   },
   "author": "Nodari Chkuaselidze",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nodech/hns-tools/issues"
+    "url": "https://github.com/nodech/hsd-tools/issues"
   },
-  "homepage": "https://github.com/nodech/hns-tools#readme",
+  "homepage": "https://github.com/nodech/hsd-tools#readme",
   "dependencies": {
     "bcfg": "~0.2.2",
     "bfile": "~0.2.3",
