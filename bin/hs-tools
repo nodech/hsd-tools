@@ -131,7 +131,16 @@ let cli, cache;
         cache: cache,
         format: config.str('format', 'ui'),
         sort: config.str('sort', 'uptime'),
-        includePruned: config.bool('include-pruned', false)
+
+        noCategories: config.bool('no-categories', false),
+
+        ignoreMain: config.bool('ignore-main', false),
+        ignoreGen: config.bool('ignore-gen', false),
+        ignoreOther: config.bool('ignore-other', false),
+
+        filterPruned: config.bool('filter-pruned', true),
+        filterUptime: config.float('filter-uptime', 0),
+        filterOnline: config.bool('filter-online', false)
       });
       break;
     }
@@ -171,8 +180,14 @@ Commands:
   depcheck               - Check dependencies of the pkg.
   genseeds               - Generate seeds for hsd network.
     --format             - Output format: json, ui
-    --sort               - Sort by: uptime, height
-    --include-pruned     - Include pruned seeds
+    --sort               - Sort by: uptime, height, ip
+    --no-categories      - Do not group by categories
+    --ignore-main        - Ignore main seeds
+    --ignore-gen         - Ignore generated seeds
+    --ignore-other       - Ignore other seeds
+    --filter-pruned      - Filter pruned seeds (default: true)
+    --filter-uptime      - Filter by uptime (default: 0)%
+    --filter-online      - Filter online seeds (default: false)
 
 Git subcommands:
   prlog                  - Log formatted by PRs
