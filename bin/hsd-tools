@@ -179,7 +179,7 @@ Commands:
   git                    - Git related subcommands
   depcheck               - Check dependencies of the pkg.
   genseeds               - Generate seeds for hsd network.
-    --format             - Output format: json, ui
+    --format             - Output format: ui, seeds
     --sort               - Sort by: uptime, height, ip
     --no-categories      - Do not group by categories
     --ignore-main        - Ignore main seeds

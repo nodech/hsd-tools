@@ -1,8 +1,7 @@
 {
   "name": "hsd-tools",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "hsd maintainance tools",
   "directories": {
     "lib": "lib"
   },
@@ -25,5 +24,8 @@
   },
   "scripts": {
     "lint": "eslint $(cat .eslintfiles)"
+  },
+  "bin": {
+    "hsd-tools": "bin/hsd-tools"
   }
 }
