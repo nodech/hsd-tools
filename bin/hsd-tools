@@ -140,7 +140,8 @@ let cli, cache;
 
         filterPruned: config.bool('filter-pruned', true),
         filterUptime: config.float('filter-uptime', 0),
-        filterOnline: config.bool('filter-online', false)
+        filterOnline: config.bool('filter-online', false),
+        filterHeight: config.int('filter-height', 0)
       });
       break;
     }
