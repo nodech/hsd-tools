@@ -146,6 +146,15 @@ let cli, cache;
       break;
     }
 
+    case 'checkseeds': {
+      await cli.run('checkseeds', {
+        ...options,
+        cache: cache,
+        seeds: argv
+      });
+      break;
+    }
+
     case 'example': {
       await cli.run('example');
       break;
@@ -189,6 +198,8 @@ Commands:
     --filter-pruned      - Filter pruned seeds (default: true)
     --filter-uptime      - Filter by uptime (default: 0)%
     --filter-online      - Filter online seeds (default: false)
+
+  checkseeds [seeds..]   - Check hsd network seeds.
 
 Git subcommands:
   prlog                  - Log formatted by PRs

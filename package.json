@@ -27,5 +27,8 @@
   },
   "bin": {
     "hsd-tools": "bin/hsd-tools"
+  },
+  "devDependencies": {
+    "bslintrc": "^0.0.3"
   }
 }
