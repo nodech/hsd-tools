@@ -183,7 +183,7 @@ let cli, cache;
 });
 
 function help() {
-  return `hs-tools [tool options] command [command options]
+  return `hsd-tools [tool options] command [command options]
 Commands:
   help                   - Show this help.
   git                    - Git related subcommands
@@ -218,6 +218,7 @@ General options:
   --ghkey                - GH API Key
   --ghconcurrent         - Concurrent requests to send to the API.
   --npmconcurrent        - Concurrent requests to send to the NPM.
+  --cache-ignore         - Ignore cache (default: false)
 
 NOTE:
   Any above configuration can be stored in a config filed at
